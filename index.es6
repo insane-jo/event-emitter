@@ -1,5 +1,6 @@
 const DEFAULT_VALUES = {
-    emitDelay: 10
+    emitDelay: 10,
+    strictMode: false
 };
 
 /**
@@ -21,16 +22,24 @@ class EventEmitter {
      * @constructor
      * @param {{}}      [opts]
      * @param {number}  [opts.emitDelay = 10] - Number in ms. Specifies whether emit will be sync or async. By default - 10ms. If 0 - fires sync
+     * @param {boolean} [opts.strictMode = false] - is true, Emitter throws error on emit error with no listeners
      */
     constructor(opts = DEFAULT_VALUES) {
-        let emitDelay;
+        let emitDelay, strictMode;
 
         if (opts.hasOwnProperty('emitDelay')) {
             emitDelay = opts.emitDelay;
         } else {
             emitDelay = DEFAULT_VALUES.emitDelay;
         }
-        this.emitDelay = emitDelay;
+        this._emitDelay = emitDelay;
+
+        if (opts.hasOwnProperty('strictMode')) {
+            strictMode = opts.strictMode;
+        } else {
+            strictMode = DEFAULT_VALUES.strictMode;
+        }
+        this._strictMode = strictMode;
 
         this._listeners = {};
         this.events = [];
@@ -111,6 +120,11 @@ class EventEmitter {
                 removedEvents.forEach(function (idx) {
                     typeListeners.splice(idx,1);
                 });
+
+                if (!typeListeners.length) {
+                    this.events.splice(typeIndex, 1);
+                    delete this._listeners[eventType];
+                }
             }
         }
     }
@@ -123,6 +137,14 @@ class EventEmitter {
      */
     _applyEvents(eventType, eventArguments) {
         let typeListeners = this._listeners[eventType];
+
+        if (!typeListeners || !typeListeners.length) {
+            if (this._strictMode) {
+                throw 'No listeners specified for event: ' + eventType;
+            } else {
+                return;
+            }
+        }
 
         let removableListeners = [];
         typeListeners.forEach(function (eeListener, idx) {
@@ -143,13 +165,9 @@ class EventEmitter {
      * @param eventArgs
      */
     emit(type, ...eventArgs) {
-        if (!type || this.events.indexOf(type) === -1) {
-            return;
-        }
-
-        if (this.emitDelay) {
+        if (this._emitDelay) {
             setTimeout(
-                ::this._applyEvents(type, eventArgs), this.emitDelay
+                ::this._applyEvents(type, eventArgs), this._emitDelay
             );
         } else {
             this._applyEvents(type, eventArgs);
@@ -162,10 +180,6 @@ class EventEmitter {
      * @param eventArgs
      */
     emitSync(type, ...eventArgs) {
-        if (!type || this.events.indexOf(type) === -1) {
-            return;
-        }
-
         this._applyEvents(type, eventArgs);
     }
 

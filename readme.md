@@ -2,7 +2,9 @@
  
 A small event emitter library. Works in the browser and in Node. Can be used with es6 inheritance or as stand-alone lib.
 
-Inspired by the [tiny-emitter package on npm](https://www.npmjs.com/package/tiny-emitter)
+Inspired by the [tiny-emitter package on npm](https://www.npmjs.com/package/tiny-emitter).
+
+For more information you can see jsdoc info in `index.es6` file.
 
 ## Install
 
@@ -88,6 +90,7 @@ An option can be passed to constructor
 
 * `opts` - settings object for create event emitter
 * `opts.emitDelay` - delay in ms to emit event. If passed 0 - all events emits synchronously. By default = 10 
+* `opts.strictMode` - when emit event with no listeners - fires error. By default = false
 
 ### on(event, callback)
 
