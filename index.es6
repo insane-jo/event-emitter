@@ -61,10 +61,20 @@ class EventEmitter {
         }
     }
 
+    /**
+     * Subscribes on event type specified function
+     * @param {string} type
+     * @param {function} listener
+     */
     on(type, listener) {
         this._addListenner(type, listener, false);
     }
 
+    /**
+     * Subscribes on event type specified function to fire only once
+     * @param {string} type
+     * @param {function} listener
+     */
     once(type, listener) {
         this._addListenner(type, listener, true);
     }
@@ -106,8 +116,9 @@ class EventEmitter {
     }
 
     /**
-     * @param eventType
-     * @param eventArguments
+     * Applies arguments to specified event type
+     * @param {string} eventType
+     * @param {*[]} eventArguments
      * @protected
      */
     _applyEvents(eventType, eventArguments) {
