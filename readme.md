@@ -2,7 +2,7 @@
  
 A small event emitter library. Works in the browser and in Node. Can be used with es6 inheritance or as stand-alone lib.
 
-Inspired by the [https://www.npmjs.com/package/tiny-emitter](tiny-emitter package on npm)
+Inspired by the [tiny-emitter package on npm](https://www.npmjs.com/package/tiny-emitter)
 
 ## Install
 
@@ -82,6 +82,13 @@ emittingInstance.fireExampleEvent();
 
 ## Instance Methods
 
+### constructor([opts])
+
+An option can be passed to constructor
+
+* `opts` - settings object for create event emitter
+* `opts.emitDelay` - delay in ms to emit event. If passed 0 - all events emits synchronously. By default = 10 
+
 ### on(event, callback)
 
 Subscribe to an event
@@ -106,6 +113,13 @@ Unsubscribe from an event or all events. If no callback is provided, it unsubscr
 ### emit(event[, ...arguments])
 
 Trigger a named event
+
+* `event` - the event name to emit
+* `arguments...` - any number of arguments to pass to the event subscribers
+
+### emitSync(event[, ...arguments])
+
+Trigger a named event immediate (even the emitter was created as async instance)
 
 * `event` - the event name to emit
 * `arguments...` - any number of arguments to pass to the event subscribers

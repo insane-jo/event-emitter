@@ -1,5 +1,4 @@
 const DEFAULT_VALUES = {
-    fireErrorIfNoListenersOnEmit: false,
     emitDelay: 10
 };
 
@@ -160,6 +159,5 @@ class EventEmitter {
     }
 
 }
-
 
 module.exports = EventEmitter;
