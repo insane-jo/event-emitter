@@ -1,10 +1,13 @@
 {
-  "name": "event-emitter",
-  "version": "0.1.0",
+  "name": "event-emitter-es6",
+  "version": "0.9.9",
   "description": "Small event emitter for using in es6 and plain js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run bundle && npm run minify",
+    "bundle": "node_modules/.bin/browserify index.es6 > dist/event-emitter.js -s EventEmitter -t [ babelify ] && echo \"bundled\"",
+    "minify": "node_modules/.bin/uglifyjs dist/event-emitter.js -o dist/event-emitter.min.js -m && echo \"minified\""
   },
   "repository": {
     "type": "git",
@@ -16,9 +19,18 @@
     "event-emitter-es6"
   ],
   "author": "insane-jo",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/insane-jo/event-emitter/issues"
   },
-  "homepage": "https://github.com/insane-jo/event-emitter#readme"
+  "homepage": "https://github.com/insane-jo/event-emitter#readme",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-plugin-transform-es2015-modules-umd": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
+    "uglify-js": "^2.6.2"
+  }
 }
