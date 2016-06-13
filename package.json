@@ -1,0 +1,24 @@
+{
+  "name": "event-emitter",
+  "version": "0.1.0",
+  "description": "Small event emitter for using in es6 and plain js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/insane-jo/event-emitter.git"
+  },
+  "keywords": [
+    "eventemitter",
+    "event-emitter",
+    "event-emitter-es6"
+  ],
+  "author": "insane-jo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/insane-jo/event-emitter/issues"
+  },
+  "homepage": "https://github.com/insane-jo/event-emitter#readme"
+}
