@@ -1,6 +1,6 @@
 {
   "name": "event-emitter-es6",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Small event emitter for using in es6 and plain js",
   "main": "index.js",
   "scripts": {
