@@ -1,6 +1,6 @@
 {
   "name": "event-emitter-es6",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Small event emitter for using in es6 and plain js",
   "main": "index.js",
   "scripts": {
@@ -33,5 +33,8 @@
     "babelify": "^7.3.0",
     "browserify": "^13.0.1",
     "uglify-js": "^2.6.2"
+  },
+  "optionalDependencies": {
+    "express": "^4.13.4"
   }
 }

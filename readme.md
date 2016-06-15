@@ -6,6 +6,8 @@ Inspired by the [tiny-emitter package on npm](https://www.npmjs.com/package/tiny
 
 For more information you can see jsdoc info in `index.es6` file.
 
+Very simply applies to express.
+
 ## Install
 
 Node
@@ -22,6 +24,21 @@ bower install event-emitter-es6 --save
  
 ```html
 <script src="bower_components/event-emitter-es6/dist/event-emitter.min.js"></script>
+``` 
+
+or apply via express
+
+```javascript
+var express = require('express');
+var app = express();
+
+<... your code here ...>
+
+app.use( require('event-emitter-es6/router') );
+```
+
+```html
+<script src="event-emitter-es6/dist/event-emitter.min.js"></script>
 ``` 
 
 ## Usage
