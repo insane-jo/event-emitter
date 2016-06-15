@@ -38,7 +38,7 @@ app.use( require('event-emitter-es6/router') );
 ```
 
 ```html
-<script src="event-emitter-es6/dist/event-emitter.min.js"></script>
+<script src="event-emitter-es6/event-emitter.min.js"></script>
 ``` 
 
 ## Usage
