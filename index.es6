@@ -166,8 +166,9 @@ class EventEmitter {
      */
     emit(type, ...eventArgs) {
         if (this._emitDelay) {
-            setTimeout(
-                ::this._applyEvents(type, eventArgs), this._emitDelay
+            setTimeout(() => {
+                    ::this._applyEvents(type, eventArgs)
+                }, this._emitDelay
             );
         } else {
             this._applyEvents(type, eventArgs);

@@ -201,12 +201,16 @@ var EventEmitter = function () {
     }, {
         key: 'emit',
         value: function emit(type) {
+            var _this2 = this;
+
             for (var _len = arguments.length, eventArgs = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
                 eventArgs[_key - 1] = arguments[_key];
             }
 
             if (this._emitDelay) {
-                setTimeout(this._applyEvents.call(this, type, eventArgs), this._emitDelay);
+                setTimeout(function () {
+                    _this2._applyEvents.call(_this2, type, eventArgs);
+                }, this._emitDelay);
             } else {
                 this._applyEvents(type, eventArgs);
             }
