@@ -152,3 +152,18 @@ Build (Browserifies, and minifies)
 npm install
 npm run build
 ```
+
+## Test
+ 
+Test
+
+```
+npm install
+npm run test
+```
+
+## Change list
+
+### Version 1.1.4
+
+* All code covered with tests

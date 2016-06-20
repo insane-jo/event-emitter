@@ -1,10 +1,10 @@
 {
   "name": "event-emitter-es6",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Small event emitter for using in es6 and plain js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --require ./test/test-helper.js --recursive",
     "build": "npm run bundle && npm run minify && npm run bundle-node",
     "bundle": "node_modules/.bin/browserify index.es6 > dist/event-emitter.js -s EventEmitter -t [ babelify ] && echo \"bundled\"",
     "minify": "node_modules/.bin/uglifyjs dist/event-emitter.js -o dist/event-emitter.min.js -m && echo \"minified\"",
@@ -32,6 +32,8 @@
     "babel-preset-stage-0": "^6.5.0",
     "babelify": "^7.3.0",
     "browserify": "^13.0.1",
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
     "uglify-js": "^2.6.2"
   }
 }
