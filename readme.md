@@ -109,6 +109,10 @@ An option can be passed to constructor
 * `opts.emitDelay` - delay in ms to emit event. If passed 0 - all events emits synchronously. By default = 10 
 * `opts.strictMode` - when emit event with no listeners - fires error. By default = false
 
+### destroy()
+
+Completely destroys event emitter.
+
 ### on(event, callback)
 
 Subscribe to an event
@@ -163,6 +167,10 @@ npm run test
 ```
 
 ## Change list
+
+### Version 1.1.5
+
+* destroy() method of class
 
 ### Version 1.1.4
 

@@ -184,6 +184,14 @@ class EventEmitter {
         this._applyEvents(type, eventArgs);
     }
 
+    /**
+     * Destroys EventEmitter
+     */
+    destroy() {
+        this._listeners = {};
+        this.events = [];
+    }
+    
 }
 
 module.exports = EventEmitter;

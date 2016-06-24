@@ -52,4 +52,22 @@ describe('Emitting', () => {
         testValue = 'test-new-val';
     });
 
+    it('destroy() removes all event listeners ', () => {
+        let ee = new EventEmitter({
+            emitDelay: 50
+        });
+
+        let testValue;
+
+        ee.on('test', function () {
+            expect(testValue).equal(void 0);
+        });
+        
+        ee.destroy();
+
+        ee.emitSync('test');
+
+        testValue = 'test-new-val';
+    });
+
 });

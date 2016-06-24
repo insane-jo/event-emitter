@@ -230,6 +230,17 @@ var EventEmitter = function () {
 
             this._applyEvents(type, eventArgs);
         }
+
+        /**
+         * Destroys EventEmitter
+         */
+
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            this._listeners = {};
+            this.events = [];
+        }
     }]);
 
     return EventEmitter;
