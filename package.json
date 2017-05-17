@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --require ./test/test-helper.js --recursive",
-    "build": "npm run bundle && npm run minify && npm run bundle-node",
+    "build": "npm run bundle && npm run minify",
     "bundle": "node_modules/.bin/browserify index.js > dist/event-emitter.js -s EventEmitter -t [ babelify ] && echo \"bundled\"",
-    "minify": "node_modules/.bin/uglifyjs dist/event-emitter.js -o dist/event-emitter.min.js -m && echo \"minified\"",
-    "bundle-node": "node_modules/.bin/babel index.js -o index.js && echo \"bundled for node\""
+    "minify": "node_modules/.bin/uglifyjs dist/event-emitter.js -o dist/event-emitter.min.js -m && echo \"minified\""
   },
   "repository": {
     "type": "git",

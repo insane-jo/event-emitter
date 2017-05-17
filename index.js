@@ -1,14 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var DEFAULT_VALUES = {
+const DEFAULT_VALUES = {
     emitDelay: 10,
     strictMode: false
 };
@@ -26,8 +16,7 @@ var DEFAULT_VALUES = {
  * @property {Object.<string, EventEmitterListenerFunc[]>} _listeners
  * @property {string[]} events
  */
-
-var EventEmitter = function () {
+export default class EventEmitter {
 
     /**
      * @constructor
@@ -35,13 +24,8 @@ var EventEmitter = function () {
      * @param {number}  [opts.emitDelay = 10] - Number in ms. Specifies whether emit will be sync or async. By default - 10ms. If 0 - fires sync
      * @param {boolean} [opts.strictMode = false] - is true, Emitter throws error on emit error with no listeners
      */
-    function EventEmitter() {
-        var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_VALUES;
-
-        _classCallCheck(this, EventEmitter);
-
-        var emitDelay = void 0,
-            strictMode = void 0;
+    constructor(opts = DEFAULT_VALUES) {
+        let emitDelay, strictMode;
 
         if (opts.hasOwnProperty('emitDelay')) {
             emitDelay = opts.emitDelay;
@@ -67,74 +51,61 @@ var EventEmitter = function () {
      * @param {function} listener
      * @param {boolean} [once = false]
      */
+    _addListener(type, listener, once) {
+        if (typeof listener !== 'function') {
+            throw TypeError('listener must be a function');
+        }
 
+        if (this.events.indexOf(type) === -1) {
+            this._listeners[type] = [{
+                once: once,
+                fn: listener
+            }];
+            this.events.push(type);
+        } else {
+            this._listeners[type].push({
+                once: once,
+                fn: listener
+            });
+        }
+    }
 
-    _createClass(EventEmitter, [{
-        key: '_addListener',
-        value: function _addListener(type, listener, once) {
-            if (typeof listener !== 'function') {
-                throw TypeError('listener must be a function');
-            }
+    /**
+     * Subscribes on event type specified function
+     * @param {string} type
+     * @param {function} listener
+     */
+    on(type, listener) {
+        this._addListener(type, listener, false);
+    }
 
-            if (this.events.indexOf(type) === -1) {
-                this._listeners[type] = [{
-                    once: once,
-                    fn: listener
-                }];
-                this.events.push(type);
+    /**
+     * Subscribes on event type specified function to fire only once
+     * @param {string} type
+     * @param {function} listener
+     */
+    once(type, listener) {
+        this._addListener(type, listener, true);
+    }
+
+    /**
+     * Removes event with specified type. If specified listenerFunc - deletes only one listener of specified type
+     * @param {string} eventType
+     * @param {function} [listenerFunc]
+     */
+    off(eventType, listenerFunc) {
+        let typeIndex = this.events.indexOf(eventType);
+        let hasType = eventType && typeIndex !== -1;
+
+        if (hasType) {
+            if (!listenerFunc) {
+                delete this._listeners[eventType];
+                this.events.splice(typeIndex, 1);
             } else {
-                this._listeners[type].push({
-                    once: once,
-                    fn: listener
-                });
-            }
-        }
+                let removedEvents = [];
+                let typeListeners = this._listeners[eventType];
 
-        /**
-         * Subscribes on event type specified function
-         * @param {string} type
-         * @param {function} listener
-         */
-
-    }, {
-        key: 'on',
-        value: function on(type, listener) {
-            this._addListener(type, listener, false);
-        }
-
-        /**
-         * Subscribes on event type specified function to fire only once
-         * @param {string} type
-         * @param {function} listener
-         */
-
-    }, {
-        key: 'once',
-        value: function once(type, listener) {
-            this._addListener(type, listener, true);
-        }
-
-        /**
-         * Removes event with specified type. If specified listenerFunc - deletes only one listener of specified type
-         * @param {string} eventType
-         * @param {function} [listenerFunc]
-         */
-
-    }, {
-        key: 'off',
-        value: function off(eventType, listenerFunc) {
-            var typeIndex = this.events.indexOf(eventType);
-            var hasType = eventType && typeIndex !== -1;
-
-            if (hasType) {
-                if (!listenerFunc) {
-                    delete this._listeners[eventType];
-                    this.events.splice(typeIndex, 1);
-                } else {
-                    var removedEvents = [];
-                    var typeListeners = this._listeners[eventType];
-
-                    typeListeners.forEach(
+                typeListeners.forEach(
                     /**
                      * @param {EventEmitterListenerFunc} fn
                      * @param {number} idx
@@ -143,106 +114,82 @@ var EventEmitter = function () {
                         if (fn.fn === listenerFunc) {
                             removedEvents.unshift(idx);
                         }
-                    });
-
-                    removedEvents.forEach(function (idx) {
-                        typeListeners.splice(idx, 1);
-                    });
-
-                    if (!typeListeners.length) {
-                        this.events.splice(typeIndex, 1);
-                        delete this._listeners[eventType];
                     }
+                );
+
+                removedEvents.forEach(function (idx) {
+                    typeListeners.splice(idx,1);
+                });
+
+                if (!typeListeners.length) {
+                    this.events.splice(typeIndex, 1);
+                    delete this._listeners[eventType];
                 }
             }
         }
+    }
 
-        /**
-         * Applies arguments to specified event type
-         * @param {string} eventType
-         * @param {*[]} eventArguments
-         * @protected
-         */
+    /**
+     * Applies arguments to specified event type
+     * @param {string} eventType
+     * @param {*[]} eventArguments
+     * @protected
+     */
+    _applyEvents(eventType, eventArguments) {
+        let typeListeners = this._listeners[eventType];
 
-    }, {
-        key: '_applyEvents',
-        value: function _applyEvents(eventType, eventArguments) {
-            var typeListeners = this._listeners[eventType];
-
-            if (!typeListeners || !typeListeners.length) {
-                if (this._strictMode) {
-                    throw 'No listeners specified for event: ' + eventType;
-                } else {
-                    return;
-                }
-            }
-
-            var removableListeners = [];
-            typeListeners.forEach(function (eeListener, idx) {
-                eeListener.fn.apply(null, eventArguments);
-                if (eeListener.once) {
-                    removableListeners.unshift(idx);
-                }
-            });
-
-            removableListeners.forEach(function (idx) {
-                typeListeners.splice(idx, 1);
-            });
-        }
-
-        /**
-         * Emits event with specified type and params.
-         * @param {string} type
-         * @param eventArgs
-         */
-
-    }, {
-        key: 'emit',
-        value: function emit(type) {
-            var _this = this;
-
-            for (var _len = arguments.length, eventArgs = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                eventArgs[_key - 1] = arguments[_key];
-            }
-
-            if (this._emitDelay) {
-                setTimeout(function () {
-                    _this._applyEvents.call(_this, type, eventArgs);
-                }, this._emitDelay);
+        if (!typeListeners || !typeListeners.length) {
+            if (this._strictMode) {
+                throw 'No listeners specified for event: ' + eventType;
             } else {
-                this._applyEvents(type, eventArgs);
+                return;
             }
         }
 
-        /**
-         * Emits event with specified type and params synchronously.
-         * @param {string} type
-         * @param eventArgs
-         */
-
-    }, {
-        key: 'emitSync',
-        value: function emitSync(type) {
-            for (var _len2 = arguments.length, eventArgs = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-                eventArgs[_key2 - 1] = arguments[_key2];
+        let removableListeners = [];
+        typeListeners.forEach(function (eeListener, idx) {
+            eeListener.fn.apply(null, eventArguments);
+            if (eeListener.once) {
+                removableListeners.unshift(idx);
             }
+        });
 
+        removableListeners.forEach(function (idx) {
+            typeListeners.splice(idx, 1);
+        });
+    }
+
+    /**
+     * Emits event with specified type and params.
+     * @param {string} type
+     * @param eventArgs
+     */
+    emit(type, ...eventArgs) {
+        if (this._emitDelay) {
+            setTimeout(() => {
+                    ::this._applyEvents(type, eventArgs)
+                }, this._emitDelay
+            );
+        } else {
             this._applyEvents(type, eventArgs);
         }
+    }
 
-        /**
-         * Destroys EventEmitter
-         */
+    /**
+     * Emits event with specified type and params synchronously.
+     * @param {string} type
+     * @param eventArgs
+     */
+    emitSync(type, ...eventArgs) {
+        this._applyEvents(type, eventArgs);
+    }
 
-    }, {
-        key: 'destroy',
-        value: function destroy() {
-            this._listeners = {};
-            this.events = [];
-        }
-    }]);
+    /**
+     * Destroys EventEmitter
+     */
+    destroy() {
+        this._listeners = {};
+        this.events = [];
+    }
 
-    return EventEmitter;
-}();
-
-exports.default = EventEmitter;
+}
