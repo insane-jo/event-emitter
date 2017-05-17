@@ -1,6 +1,10 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.EventEmitter = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32,9 +36,8 @@ var EventEmitter = function () {
      * @param {number}  [opts.emitDelay = 10] - Number in ms. Specifies whether emit will be sync or async. By default - 10ms. If 0 - fires sync
      * @param {boolean} [opts.strictMode = false] - is true, Emitter throws error on emit error with no listeners
      */
-
     function EventEmitter() {
-        var opts = arguments.length <= 0 || arguments[0] === undefined ? DEFAULT_VALUES : arguments[0];
+        var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_VALUES;
 
         _classCallCheck(this, EventEmitter);
 
@@ -68,8 +71,8 @@ var EventEmitter = function () {
 
 
     _createClass(EventEmitter, [{
-        key: '_addListenner',
-        value: function _addListenner(type, listener, once) {
+        key: '_addListener',
+        value: function _addListener(type, listener, once) {
             if (typeof listener !== 'function') {
                 throw TypeError('listener must be a function');
             }
@@ -97,7 +100,7 @@ var EventEmitter = function () {
     }, {
         key: 'on',
         value: function on(type, listener) {
-            this._addListenner(type, listener, false);
+            this._addListener(type, listener, false);
         }
 
         /**
@@ -109,7 +112,7 @@ var EventEmitter = function () {
     }, {
         key: 'once',
         value: function once(type, listener) {
-            this._addListenner(type, listener, true);
+            this._addListener(type, listener, true);
         }
 
         /**
@@ -121,8 +124,6 @@ var EventEmitter = function () {
     }, {
         key: 'off',
         value: function off(eventType, listenerFunc) {
-            var _this = this;
-
             var typeIndex = this.events.indexOf(eventType);
             var hasType = eventType && typeIndex !== -1;
 
@@ -131,30 +132,28 @@ var EventEmitter = function () {
                     delete this._listeners[eventType];
                     this.events.splice(typeIndex, 1);
                 } else {
-                    (function () {
-                        var removedEvents = [];
-                        var typeListeners = _this._listeners[eventType];
+                    var removedEvents = [];
+                    var typeListeners = this._listeners[eventType];
 
-                        typeListeners.forEach(
-                        /**
-                         * @param {EventEmitterListenerFunc} fn
-                         * @param {number} idx
-                         */
-                        function (fn, idx) {
-                            if (fn.fn === listenerFunc) {
-                                removedEvents.unshift(idx);
-                            }
-                        });
-
-                        removedEvents.forEach(function (idx) {
-                            typeListeners.splice(idx, 1);
-                        });
-
-                        if (!typeListeners.length) {
-                            _this.events.splice(typeIndex, 1);
-                            delete _this._listeners[eventType];
+                    typeListeners.forEach(
+                    /**
+                     * @param {EventEmitterListenerFunc} fn
+                     * @param {number} idx
+                     */
+                    function (fn, idx) {
+                        if (fn.fn === listenerFunc) {
+                            removedEvents.unshift(idx);
                         }
-                    })();
+                    });
+
+                    removedEvents.forEach(function (idx) {
+                        typeListeners.splice(idx, 1);
+                    });
+
+                    if (!typeListeners.length) {
+                        this.events.splice(typeIndex, 1);
+                        delete this._listeners[eventType];
+                    }
                 }
             }
         }
@@ -201,7 +200,7 @@ var EventEmitter = function () {
     }, {
         key: 'emit',
         value: function emit(type) {
-            var _this2 = this;
+            var _this = this;
 
             for (var _len = arguments.length, eventArgs = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
                 eventArgs[_key - 1] = arguments[_key];
@@ -209,7 +208,7 @@ var EventEmitter = function () {
 
             if (this._emitDelay) {
                 setTimeout(function () {
-                    _this2._applyEvents.call(_this2, type, eventArgs);
+                    _this._applyEvents.call(_this, type, eventArgs);
                 }, this._emitDelay);
             } else {
                 this._applyEvents(type, eventArgs);
@@ -247,7 +246,7 @@ var EventEmitter = function () {
     return EventEmitter;
 }();
 
-module.exports = EventEmitter;
+exports.default = EventEmitter;
 
 },{}]},{},[1])(1)
 });

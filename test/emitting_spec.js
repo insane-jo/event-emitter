@@ -1,5 +1,5 @@
-let expect = require('chai').expect;
-let EventEmitter = require('../index');
+import { expect } from 'chai';
+import EventEmitter from '../index';
 
 describe('Emitting', () => {
     "use strict";
@@ -62,7 +62,7 @@ describe('Emitting', () => {
         ee.on('test', function () {
             expect(testValue).equal(void 0);
         });
-        
+
         ee.destroy();
 
         ee.emitSync('test');

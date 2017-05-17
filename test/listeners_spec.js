@@ -1,5 +1,5 @@
-let expect = require('chai').expect;
-let EventEmitter = require('../index');
+import { expect } from 'chai';
+import EventEmitter from '../index';
 
 describe('Listeners manipulations', () => {
     "use strict";
@@ -152,7 +152,7 @@ describe('Listeners manipulations', () => {
 
         expect(testValue).equal(2);
     });
-    
+
     it('Multiple once listeners', () => {
         let ee = new EventEmitter({
             emitDelay: 0

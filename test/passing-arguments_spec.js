@@ -1,5 +1,5 @@
-let expect = require('chai').expect;
-let EventEmitter = require('../index');
+import { expect } from 'chai';
+import EventEmitter from '../index';
 
 describe('Passing arguments', () => {
     "use strict";
