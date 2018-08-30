@@ -5,11 +5,10 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "mocha --require ./test/test-helper.js --recursive",
-    "build": "npm run bundle && npm run minify && npm run bundle-node",
-    "bundle": "node_modules/.bin/browserify index.es6 > dist/event-emitter.js -s EventEmitter -t [ babelify ] && echo \"bundled\"",
-    "minify": "node_modules/.bin/uglifyjs dist/event-emitter.js -o dist/event-emitter.min.js -m && echo \"minified\"",
-    "bundle-node": "node_modules/.bin/babel index.es6 -o index.js && echo \"bundled for node\""
+    "test": "mocha --compilers js:babel-core/register --require ./test/test-helper.js --recursive",
+    "build": "npm run bundle && npm run minify",
+    "bundle": "node_modules/.bin/browserify index.js > dist/event-emitter.js -s EventEmitter -t [ babelify ] && echo \"bundled\"",
+    "minify": "node_modules/.bin/uglifyjs dist/event-emitter.js -o dist/event-emitter.min.js -m && echo \"minified\""
   },
   "repository": {
     "type": "git",
