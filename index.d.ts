@@ -11,13 +11,13 @@ declare module "event-emitter-es6" {
 
     type Listener = (...args: any[]) => void;
 
-    class EventEmitter {
+    class EventEmitter<Type = string> {
         constructor(options?: Options);
-        on(type: string, listener: Listener): void;
-        once(type: string, listener: Listener): void;
-        off(type: string, listener?: Listener): void;
-        emit(type: string, ...eventArgs: any[]): void;
-        emitSync(type: string, ...eventArgs: any[]): void;
+        on(type: Type, listener: Listener): void;
+        once(type: Type, listener: Listener): void;
+        off(type: Type, listener?: Listener): void;
+        emit(type: Type, ...eventArgs: any[]): void;
+        emitSync(type: Type, ...eventArgs: any[]): void;
         destroy(): void;
     }
 
